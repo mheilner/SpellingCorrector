@@ -64,8 +64,17 @@ public class Trie implements ITrie{
 
     @Override
     public boolean equals(Object obj) {
+        INode curr = root;
+        if(obj == null || obj.getClass() != root.getClass()){return false;}
+
+        //Create helper function to check if they are equal
+        private boolean checker(Node n1, Node n2){
+            return n1 == null && n2 == null;
+        }
+
         return super.equals(obj);
     }
+
 
     @Override
     public String toString() {

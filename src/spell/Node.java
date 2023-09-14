@@ -3,7 +3,7 @@ package spell;
 public class Node implements INode{
     // INSTANCE VARIABLES
     private int count;
-    private Node[] children;
+    private INode[] children;
 
     public Node(){
         this.count = 0;

@@ -18,7 +18,6 @@ public class Trie implements ITrie{
         word = word.toLowerCase();
 
         INode curr = root;
-
         for(char l: word.toCharArray()){
             int ind = l - 'a'; // Getting the index of the current letter l
             if (curr.getChildren()[ind] == null){
@@ -27,9 +26,10 @@ public class Trie implements ITrie{
             }
             curr = curr.getChildren()[ind];
         }
-        curr.incrementValue();
-        wordCount++;
-
+        if(curr.getValue()==0){
+            curr.incrementValue();
+            wordCount++;
+        }
     }
 
     @Override
@@ -64,15 +64,26 @@ public class Trie implements ITrie{
 
     @Override
     public boolean equals(Object obj) {
-        INode curr = root;
-        if(obj == null || obj.getClass() != root.getClass()){return false;}
+        if(this == obj){return true;}
 
-        //Create helper function to check if they are equal
-        private boolean checker(Node n1, Node n2){
-            return n1 == null && n2 == null;
+        if(obj == null || obj.getClass() != getClass()){return false;} //Got an error here doing root.getClass instead of just getClass. Remember that
+        Trie trie = (Trie) obj;
+
+        return checkEqual(root, trie.root);
+    }
+    //Create helper function to check if they are equal
+    private boolean checkEqual(INode n1, INode n2){
+        if(n1 == null && n2 == null){return true;}
+
+        if(n1 == null || n2 == null){return false;}
+
+        if(n1.getValue() != n2.getValue()){return false;}
+
+        for(int i = 0; i < n1.getChildren().length; i++){
+           if(!checkEqual(n1.getChildren()[i], n2.getChildren()[i]))
+               return false;
         }
-
-        return super.equals(obj);
+        return true;
     }
 
 

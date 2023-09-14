@@ -27,9 +27,9 @@ public class Trie implements ITrie{
             curr = curr.getChildren()[ind];
         }
         if(curr.getValue()==0){
-            curr.incrementValue();
             wordCount++;
         }
+        curr.incrementValue();
     }
 
     @Override
@@ -41,7 +41,7 @@ public class Trie implements ITrie{
             if(curr.getChildren()[ind]==null){return null;}
             curr = curr.getChildren()[ind];
         }
-
+        if (curr.getValue() == 0){return null;}
         return curr;
     }
 
@@ -59,7 +59,12 @@ public class Trie implements ITrie{
 
     @Override
     public int hashCode() {
-        return super.hashCode();
+        for(int i=0; i< root.getChildren().length; i++){
+            if(root.getChildren()[i]!=null){
+                return i * nodeCount * wordCount;
+            }
+        }
+        return 0;
     }
 
     @Override
@@ -69,6 +74,9 @@ public class Trie implements ITrie{
         if(obj == null || obj.getClass() != getClass()){return false;} //Got an error here doing root.getClass instead of just getClass. Remember that
         Trie trie = (Trie) obj;
 
+        if(wordCount != trie.wordCount){
+            return false;
+        }
         return checkEqual(root, trie.root);
     }
     //Create helper function to check if they are equal
@@ -89,6 +97,21 @@ public class Trie implements ITrie{
 
     @Override
     public String toString() {
-        return super.toString();
+        StringBuilder s = new StringBuilder();
+        toStringHelper(root, "", s);
+        return s.toString();
     }
+    private void toStringHelper(INode n, String currWord, StringBuilder result){
+        if(n.getValue()>0){
+            result.append(currWord).append("\n");
+        }
+        for(int i = 0; i<n.getChildren().length;i++){
+            INode child = n.getChildren()[i];
+            if(child != null){
+                char letter = (char) ('a' + i);
+                toStringHelper(child, currWord + letter, result);
+            }
+        }
+    }
+
 }
